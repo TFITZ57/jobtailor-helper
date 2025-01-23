@@ -6,7 +6,8 @@ export interface Job {
   id: string;
   company: string;
   position: string;
-  status: "notApplied" | "applied" | "pending";
+  description?: string;
+  status: "pending" | "applied" | "answered";
   dateAdded: string;
   dateModified: string;
 }
@@ -19,9 +20,9 @@ interface JobCardProps {
 
 export function JobCard({ job, onMoveLeft, onMoveRight }: JobCardProps) {
   const statusColors = {
-    notApplied: "bg-job-notApplied",
+    pending: "bg-job-notApplied",
     applied: "bg-job-applied",
-    pending: "bg-job-pending",
+    answered: "bg-job-pending",
   };
 
   return (

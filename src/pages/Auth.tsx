@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { Mail, Lock } from "lucide-react";
+import { AuthError } from "@supabase/supabase-js";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -32,10 +33,10 @@ const Auth = () => {
       });
 
       if (!isSignUp) navigate("/");
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Error",
-        description: error.message,
+        description: (error as AuthError).message,
         variant: "destructive",
       });
     } finally {
