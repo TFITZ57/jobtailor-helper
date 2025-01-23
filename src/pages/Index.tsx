@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Job, JobCard } from "@/components/JobCard";
 import { AiAssistant } from "@/components/AiAssistant";
 import { Stats } from "@/components/Stats";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, LogOut } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 const initialJobs: Job[] = [
   {
@@ -34,6 +37,8 @@ const initialJobs: Job[] = [
 
 const Index = () => {
   const [jobs, setJobs] = useState<Job[]>(initialJobs);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const moveJob = (jobId: string, direction: "left" | "right") => {
     const statusOrder = ["notApplied", "applied", "pending"];
@@ -56,6 +61,24 @@ const Index = () => {
     });
   };
 
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      navigate("/auth");
+      toast({
+        title: "Logged out successfully",
+        description: "You have been logged out of your account.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   const jobsByStatus = {
     notApplied: jobs.filter((job) => job.status === "notApplied"),
     applied: jobs.filter((job) => job.status === "applied"),
@@ -67,10 +90,16 @@ const Index = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Job Applications Dashboard</h1>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Job
-          </Button>
+          <div className="flex gap-4">
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Job
+            </Button>
+            <Button variant="outline" onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </Button>
+          </div>
         </div>
 
         <Stats jobs={jobs} />
