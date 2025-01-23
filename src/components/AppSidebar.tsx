@@ -1,4 +1,4 @@
-import { LayoutDashboard, Robot } from "lucide-react"
+import { LayoutDashboard, Bot } from "lucide-react"
 import { useLocation, Link } from "react-router-dom"
 import {
   Sidebar,
@@ -20,7 +20,7 @@ const items = [
   {
     title: "AI Assistant",
     path: "/assistant",
-    icon: Robot,
+    icon: Bot,
   },
 ]
 
