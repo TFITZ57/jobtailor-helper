@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Job, JobCard } from "@/components/JobCard";
-import { AiAssistant } from "@/components/AiAssistant";
 import { Stats } from "@/components/Stats";
 import { Button } from "@/components/ui/button";
 import { Plus, LogOut } from "lucide-react";
@@ -137,8 +136,6 @@ const Index = () => {
             ))}
           </div>
         </div>
-
-        <AiAssistant />
       </div>
     </div>
   );

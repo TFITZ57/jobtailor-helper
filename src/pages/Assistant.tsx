@@ -3,18 +3,43 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
-import { Upload } from "lucide-react"
+import { Upload, Loader2, Download } from "lucide-react"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function Assistant() {
   const [linkedinUrl, setLinkedinUrl] = useState("")
   const [jobDescription, setJobDescription] = useState("")
+  const [resume, setResume] = useState("")
+  const [isGenerating, setIsGenerating] = useState(false)
+  const { toast } = useToast()
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      console.log("File uploaded:", file.name)
       // TODO: Implement file upload logic
+      console.log("File uploaded:", file.name)
     }
+  }
+
+  const handleGenerate = async () => {
+    if (!jobDescription || !resume) {
+      toast({
+        title: "Missing Information",
+        description: "Please provide both job description and resume",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsGenerating(true)
+    // TODO: Implement AI generation logic
+    await new Promise((resolve) => setTimeout(resolve, 2000)) // Simulated delay
+    setIsGenerating(false)
+    
+    toast({
+      title: "Documents Generated",
+      description: "Your tailored resume and cover letter are ready!",
+    })
   }
 
   return (
@@ -62,6 +87,31 @@ export default function Assistant() {
               className="min-h-[200px]"
             />
           </Card>
+
+          <Card className="p-4">
+            <h2 className="text-lg font-semibold mb-4">Your Current Resume</h2>
+            <Textarea
+              placeholder="Paste your current resume here..."
+              value={resume}
+              onChange={(e) => setResume(e.target.value)}
+              className="min-h-[200px]"
+            />
+          </Card>
+
+          <div className="flex space-x-4">
+            <Button
+              onClick={handleGenerate}
+              disabled={isGenerating}
+              className="w-full"
+            >
+              {isGenerating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Generate Documents
+            </Button>
+            <Button variant="outline" disabled={isGenerating}>
+              <Download className="mr-2 h-4 w-4" />
+              Save Documents
+            </Button>
+          </div>
         </div>
 
         <div className="space-y-6">
